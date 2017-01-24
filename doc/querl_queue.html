@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module querl_queue</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module querl_queue</h1>
+<ul class="index"><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+
+
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-queue">queue()</a></h3>
+<p><tt>queue() = <a href="#type-queue">queue</a>(any(), any())</tt></p>
+
+
+<h3 class="typedecl"><a name="type-queue">queue()</a></h3>
+<p><tt>queue(Key, Payload) = #'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{Key =&gt; {_LinkedListPointer, Payload}}}</tt></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#clone-1">clone/1</a></td><td>Might seem slightly counter-intuitive to Erlang programmers, but
+  operations on queues actually change the underlying object without cloning
+  it...</td></tr>
+<tr><td valign="top"><a href="#empty-1">empty/1</a></td><td>Empties the queue of all its current items, and returns an empty queue
+  WARNING: this is a destructive operation!</td></tr>
+<tr><td valign="top"><a href="#foldl-3">foldl/3</a></td><td>Folds items in order, same idea as <code>lists:foldl/3</code>
+  This is not a destructive operation.</td></tr>
+<tr><td valign="top"><a href="#in-3">in/3</a></td><td>Inserts a new item at the end of the queue
+  Errors out if the <code>Key</code> is already present
+  WARNING: this is a destructive operation!</td></tr>
+<tr><td valign="top"><a href="#in_or_update-4">in_or_update/4</a></td><td>Inserts an existing item at the end of the queue, or <code>update</code>s it if
+  it's already present
+  WARNING: this is a destructive operation!</td></tr>
+<tr><td valign="top"><a href="#new-0">new/0</a></td><td>Creates a new queue.</td></tr>
+<tr><td valign="top"><a href="#out-2">out/2</a></td><td>Pops the first <code>RequestedSize</code> items in the queue (not an error to
+  request more than currently present in the queue)
+  WARNING: this is a destructive operation!</td></tr>
+<tr><td valign="top"><a href="#remove-2">remove/2</a></td><td>Removes the item key-ed with <code>Key</code>, if present
+  WARNING: this is a destructive operation!</td></tr>
+<tr><td valign="top"><a href="#size-1">size/1</a></td><td>This is not a destructive operation.</td></tr>
+<tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td>Returns a list of the contents of the list, in order
+  This is not a destructive operation.</td></tr>
+<tr><td valign="top"><a href="#update-3">update/3</a></td><td>Updates an existing item in the queue (just the payload, not the
+  position)
+  This is not a destructive operation.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="clone-1">clone/1</a></h3>
+<div class="spec">
+<p><tt>clone(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}) -&gt; #'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}</tt><br></p>
+</div><p>Might seem slightly counter-intuitive to Erlang programmers, but
+  operations on queues actually change the underlying object without cloning
+  it...
+  This operation is costly: it basically rebuilds the whole thing from
+  scratch; shouldn't be used in production code</p>
+
+<h3 class="function"><a name="empty-1">empty/1</a></h3>
+<div class="spec">
+<p><tt>empty(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}) -&gt; {#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, Size::non_neg_integer(), [{Key::any(), Payload::any()}]}</tt><br></p>
+</div><p>Empties the queue of all its current items, and returns an empty queue
+  WARNING: this is a destructive operation! see <code>clone/1</code> below for more
+  details</p>
+
+<h3 class="function"><a name="foldl-3">foldl/3</a></h3>
+<div class="spec">
+<p><tt>foldl(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, Fun::fun((Key::any(), Payload::any(), AccIn::any()) -&gt; AccOut::any()), Acc0::any()) -&gt; AccOut::any()</tt><br></p>
+</div><p>Folds items in order, same idea as <code>lists:foldl/3</code>
+  This is not a destructive operation</p>
+
+<h3 class="function"><a name="in-3">in/3</a></h3>
+<div class="spec">
+<p><tt>in(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, Key::any(), Payload::any()) -&gt; {ok, #'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}} | {error, already_present}</tt><br></p>
+</div><p>Inserts a new item at the end of the queue
+  Errors out if the <code>Key</code> is already present
+  WARNING: this is a destructive operation! see <code>clone/1</code> below for more
+  details</p>
+
+<h3 class="function"><a name="in_or_update-4">in_or_update/4</a></h3>
+<div class="spec">
+<p><tt>in_or_update(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, Key::any(), PayloadFun::fun((OldPayload::any()) -&gt; NewPayload::any()), InitialPayload::any()) -&gt; {#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, OldPayload::any() | not_present_before}</tt><br></p>
+</div><p>Inserts an existing item at the end of the queue, or <code>update</code>s it if
+  it's already present
+  WARNING: this is a destructive operation! see <code>clone/1</code> below for more
+  details</p>
+
+<h3 class="function"><a name="new-0">new/0</a></h3>
+<div class="spec">
+<p><tt>new() -&gt; any()</tt></p>
+</div><p>Creates a new queue</p>
+
+<h3 class="function"><a name="out-2">out/2</a></h3>
+<div class="spec">
+<p><tt>out(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, RequestedSize::non_neg_integer()) -&gt; {#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, ActualSize::non_neg_integer(), [{Key::any(), Payload::any()}]}</tt><br></p>
+</div><p>Pops the first <code>RequestedSize</code> items in the queue (not an error to
+  request more than currently present in the queue)
+  WARNING: this is a destructive operation! see <code>clone/1</code> below for more
+  details</p>
+
+<h3 class="function"><a name="remove-2">remove/2</a></h3>
+<div class="spec">
+<p><tt>remove(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, Key::any()) -&gt; {ok, #'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, Payload::any()} | {error, not_found}</tt><br></p>
+</div><p>Removes the item key-ed with <code>Key</code>, if present
+  WARNING: this is a destructive operation! see <code>clone/1</code> below for more
+  details</p>
+
+<h3 class="function"><a name="size-1">size/1</a></h3>
+<div class="spec">
+<p><tt>size(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}) -&gt; non_neg_integer()</tt><br></p>
+</div><p>This is not a destructive operation</p>
+
+<h3 class="function"><a name="to_list-1">to_list/1</a></h3>
+<div class="spec">
+<p><tt>to_list(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}) -&gt; [{Key::any(), Payload::any()}]</tt><br></p>
+</div><p>Returns a list of the contents of the list, in order
+  This is not a destructive operation</p>
+
+<h3 class="function"><a name="update-3">update/3</a></h3>
+<div class="spec">
+<p><tt>update(?MODULE::#'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, Key::any(), NewPayloadOrFun::NewPayload | PayloadFun) -&gt; {ok, #'?MODULE'{linked_list_root = _LinkedListRoot, linked_list_root_version = non_neg_integer(), map = #{}}, OldPayload::any()} | {error, not_found}</tt>
+<ul class="definitions"><li><tt>NewPayload = any()</tt></li><li><tt>PayloadFun = fun((OldPayload::any()) -&gt; NewPayload::any())</tt></li></ul></p>
+</div><p>Updates an existing item in the queue (just the payload, not the
+  position)
+  This is not a destructive operation</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Jan 23 2017, 16:45:36.</i></p>
+</body>
+</html>

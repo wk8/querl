@@ -1,0 +1,13 @@
+%% -*- mode: erlang -*-
+{application, querl,
+ [
+  {description, "Fast editable priority queues"},
+  {vsn, "0.0.1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {env, []}
+ ]}.
+%% vim: set filetype=erlang tabstop=2

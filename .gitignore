@@ -1,0 +1,11 @@
+/ebin/*
+*.beam
+/deps/*
+/rel/querl
+/.concrete/DEV_MODE
+/deps.plt
+/.eunit/
+/priv/querl.so
+/.rebar/
+/c_src/*.d
+/c_src/*.o
