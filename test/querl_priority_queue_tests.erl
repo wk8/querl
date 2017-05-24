@@ -30,7 +30,7 @@ basic_usage_test() ->
     assert_queue_equals(KeysAndPrioritiesAndPayloads1, Queue2),
 
     %% now trying to re-add an existing key should error out
-    ?assertEqual({error, already_present},
+    ?assertEqual({error, {already_present, 16}},
                  querl_priority_queue:in(Queue2, 16, 3, blah)),
 
     %% now let's remove all even keys

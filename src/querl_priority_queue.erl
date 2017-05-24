@@ -25,6 +25,8 @@
            size = 0         :: non_neg_integer()
           }).
 
+-include("querl.hrl").
+
 -export_type([queue/0, queue/2]).
 -type queue(Key, Payload) :: #?MODULE{queues     :: #{priority() => querl_queue:queue(Key, Payload)},
                                       priorities :: #{Key => priority()}}.
@@ -40,7 +42,7 @@ new(LowestPriority) ->
 %% WARNING: this is a destructive operation! see `clone/1' below for more
 %% details
 -spec in(#?MODULE{}, Key :: any(), Priority :: priority(), Payload :: any())
--> {ok, #?MODULE{}} | {error, already_present}.
+-> {ok, #?MODULE{}} | already_present_error().
 in(#?MODULE{queues = Queues, priorities = Priorities, size = Size}, Key, Priority, Payload) ->
     case maps:is_key(Key, Priorities) of
         false ->
@@ -56,7 +58,7 @@ in(#?MODULE{queues = Queues, priorities = Priorities, size = Size}, Key, Priorit
                           priorities = NewPriorities,
                           size       = Size + 1}};
         true ->
-            {error, already_present}
+            {error, {already_present, Key}}
     end.
 
 %% @doc Pops up to `Size' items out of the queue (not an error to request more
