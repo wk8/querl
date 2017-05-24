@@ -20,8 +20,6 @@
     map = #{}                :: #{Key :: any() => {_LinkedListPointer, Payload :: any()}}
 }).
 
--include("querl.hrl").
-
 -export_type([queue/0, queue/2]).
 -type queue(Key, Payload) :: #?MODULE{map :: #{Key => {_LinkedListPointer, Payload}}}.
 -type queue() :: queue(any(), any()).
@@ -36,7 +34,7 @@ new() ->
 %% Errors out if the `Key' is already present
 %% WARNING: this is a destructive operation! see `clone/1' below for more
 %% details
--spec in(#?MODULE{}, Key :: any(), Payload :: any()) -> {ok, #?MODULE{}} | already_present_error().
+-spec in(#?MODULE{}, Key :: any(), Payload :: any()) -> {ok, #?MODULE{}} | {error, {already_present, Key :: any()}}.
 in(#?MODULE{linked_list_root = LinkedListRoot,
             linked_list_root_version = LinkedListRootVersion,
             map = Map} = Rec, Key, Payload) ->
