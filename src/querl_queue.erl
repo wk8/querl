@@ -34,13 +34,13 @@ new() ->
 %% Errors out if the `Key' is already present
 %% WARNING: this is a destructive operation! see `clone/1' below for more
 %% details
--spec in(#?MODULE{}, Key :: any(), Payload :: any()) -> {ok, #?MODULE{}} | {error, already_present}.
+-spec in(#?MODULE{}, Key :: any(), Payload :: any()) -> {ok, #?MODULE{}} | {error, {already_present, Key :: any()}}.
 in(#?MODULE{linked_list_root = LinkedListRoot,
             linked_list_root_version = LinkedListRootVersion,
             map = Map} = Rec, Key, Payload) ->
     case maps:find(Key, Map) of
         {ok, _} ->
-            {error, already_present};
+            {error, {already_present, Key}};
         error ->
             {LinkedListNode, NewLinkedListRootVersion} =
             querl_linked_list:append(LinkedListRoot, LinkedListRootVersion, Key),
@@ -148,7 +148,7 @@ in_or_update(Rec, Key, NewPayloadOrFun, InitialPayload) ->
     case in(Rec, Key, InitialPayload) of
         {ok, NewRec} ->
             {NewRec, not_present_before};
-        {error, already_present} ->
+        {error, {already_present, Key}} ->
             {ok, NewRec, OldPayload} = update(Rec, Key, NewPayloadOrFun),
             {NewRec, OldPayload}
     end.

@@ -22,7 +22,7 @@ basic_usage_test() ->
     assert_queue_equals(KeysAndPayloads1, Queue2),
 
     %% now trying to re-add an existing key should error out
-    ?assertEqual({error, already_present}, querl_queue:in(Queue2, 6, blah)),
+    ?assertEqual({error, {already_present, 6}}, querl_queue:in(Queue2, 6, blah)),
 
     %% now let's remove all even keys
     {EvenKeysAndPayloads, OddKeysAndPayloads} =

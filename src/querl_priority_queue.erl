@@ -40,7 +40,7 @@ new(LowestPriority) ->
 %% WARNING: this is a destructive operation! see `clone/1' below for more
 %% details
 -spec in(#?MODULE{}, Key :: any(), Priority :: priority(), Payload :: any())
--> {ok, #?MODULE{}} | {error, already_present}.
+-> {ok, #?MODULE{}} | {error, {already_present, Key :: any()}}.
 in(#?MODULE{queues = Queues, priorities = Priorities, size = Size}, Key, Priority, Payload) ->
     case maps:is_key(Key, Priorities) of
         false ->
@@ -56,7 +56,7 @@ in(#?MODULE{queues = Queues, priorities = Priorities, size = Size}, Key, Priorit
                           priorities = NewPriorities,
                           size       = Size + 1}};
         true ->
-            {error, already_present}
+            {error, {already_present, Key}}
     end.
 
 %% @doc Pops up to `Size' items out of the queue (not an error to request more
